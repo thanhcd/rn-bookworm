@@ -1,5 +1,7 @@
 import cron from "cron";
 import https from "https";
+import dotenv from "dotenv";
+dotenv.config();
 
 const job = new cron.CronJob("*/14 * * * * *", function () {
   https
@@ -9,6 +11,7 @@ const job = new cron.CronJob("*/14 * * * * *", function () {
       else console.log("GET request failed", res.statusCode);
     })
     .on("error", (e) => console.error("Error while sending request", e));
+    console.log("API_URL:", process.env.API_URL);
 });
 
 export default job;
