@@ -2,6 +2,7 @@ import express from "express";
 import cloudinary from "../lib/cloudinary.js";
 import Book from "../models/Book.js"; // Assuming you have a Book model defined
 import protectRoute from "../middleware/auth.middleware.js"; // Middleware to protect routes
+import Book from "../models/Book.js";
 
 const router = express.Router();
 
@@ -15,13 +16,13 @@ router.post("/", protectRoute, async (req, res) => {
     const uploadResponse = await cloudinary.uploader.upload(image);
     const imageUrl = uploadResponse.secure_url;
     // Create a new book object
-    const newBook = {
+    const newBook = ({
       title,
       caption,
       rating,
       image: imageUrl, // Default cover image if not provided
       user: req.user._id, // Assuming req.user is set by the protectRoute middleware
-    };
+    });
     await newBook.save();
     res.status(201).json(newBook);
   } catch (error) {
