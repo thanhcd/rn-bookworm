@@ -33,9 +33,11 @@ router.post("/", protectRoute, async (req, res) => {
 
 //pagination => infinite loading
 router.get("/", protectRoute, async (req, res) => {
+  console.log("Đã nhận request GET /books với query:", req.query);
+
   try {
     const page = req.query.page || 1;
-    const limit = req.query.limit || 5;
+    const limit = req.query.limit || 2;
     const skip = (page - 1) * limit;
     const books = await Book.find()
       .sort({ createdAt: -1 })
@@ -50,12 +52,15 @@ router.get("/", protectRoute, async (req, res) => {
       totalBooks,
       totalPages: Math.ceil(totalBooks / limit),
     });
+    console.log("Trả về books:", books);
+
     res.status(200).json(books);
   } catch (error) {
     console.error("Error fetching books:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
 
 router.get("/user", protectRoute, async (req, res) => {
   try {
